@@ -7,7 +7,28 @@ st.set_page_config(
     layout="wide"
 )
 
-# Accessibility features
+# FRONT PAGE
+st.title("♿ AccessAble Vellore")
+
+st.subheader("Accessibility Information for Important Locations")
+
+st.write(
+    "Choose a location and check its accessibility features."
+)
+
+st.write(
+    "Yes = Available | No = Not available | "
+    "No info = Treated as not available"
+)
+
+st.write(
+    "Availability Score = "
+    "(Number of features marked Yes / 6) x 100"
+)
+
+st.divider()
+
+# ACCESSIBILITY FEATURES
 features = [
     "Ramp",
     "Lift",
@@ -17,9 +38,8 @@ features = [
     "Wheelchair Friendly Entrance"
 ]
 
-# Location data provided for AccessAble Vellore
+# LOCATION DATABASE
 locations = [
-
     {
         "name": "Katpadi Railway Station",
         "type": "Railway Station",
@@ -32,7 +52,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "Sri Narayani Hospital",
         "type": "Hospital",
@@ -45,7 +64,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "Vellore New Bus Station",
         "type": "Bus Stand",
@@ -58,7 +76,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "Health Centre - VIT Vellore",
         "type": "College",
@@ -71,7 +88,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "TT - VIT Vellore",
         "type": "College",
@@ -84,7 +100,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "SJT - VIT Vellore",
         "type": "College",
@@ -97,7 +112,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "MGR Block - VIT Vellore",
         "type": "College",
@@ -110,7 +124,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "Library - VIT Vellore",
         "type": "College",
@@ -123,7 +136,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "PRP - VIT Vellore",
         "type": "College",
@@ -136,7 +148,6 @@ locations = [
             "Wheelchair Friendly Entrance": "Yes"
         }
     },
-
     {
         "name": "SMV - VIT Vellore",
         "type": "College",
@@ -151,137 +162,259 @@ locations = [
     }
 ]
 
-# Website heading
-st.title("♿ AccessAble Vellore")
+# HOW ACCESSIBILITY WORKS
+st.header("How Accessibility Works")
 
-st.subheader(
-    "Accessibility Information for Important Locations"
+st.write(
+    "Accessibility means making places easier to enter, "
+    "move around, and use for people with different access needs."
 )
 
 st.write(
-    "Search for a location, select its type, and check accessibility features."
+    "Ramp: Helps people move between different levels."
 )
 
-st.info(
-    "Yes = Available | No = Not available | "
-    "No info = Information is not available"
+st.write(
+    "Lift: Helps people reach different floors."
+)
+
+st.write(
+    "Accessible Washrooms: Designed to make washrooms "
+    "easier to access and use."
+)
+
+st.write(
+    "Tactile Path: Textured ground indicators that help "
+    "people with visual impairments navigate."
+)
+
+st.write(
+    "Braille Support: Braille labels or signs that provide "
+    "information to people who read Braille."
+)
+
+st.write(
+    "Wheelchair Friendly Entrance: An entrance designed "
+    "to make access easier for wheelchair users."
 )
 
 st.divider()
 
-# Search box
-search_name = st.text_input(
-    "Search by Location Name",
-    placeholder="Example: VIT, hospital, library"
-)
+# LOCATION SELECTION
+st.header("Choose a Location")
 
-# Location type selection
-selected_type = st.selectbox(
-    "Choose Location Type",
+selected_place = st.selectbox(
+    "Location",
     [
-        "All Locations",
-        "College",
-        "Hospital",
-        "Railway Station",
-        "Bus Stand",
-        "Government Building"
+        "VIT",
+        "Katpadi Railway Station",
+        "Sri Narayani Hospital",
+        "Vellore New Bus Station"
     ]
 )
 
-# Accessibility feature selection
+# VIT SUBDIVISIONS
+if selected_place == "VIT":
+
+    selected_vit_place = st.selectbox(
+        "Choose a place inside VIT Vellore",
+        [
+            "Health Centre - VIT Vellore",
+            "TT - VIT Vellore",
+            "SJT - VIT Vellore",
+            "MGR Block - VIT Vellore",
+            "Library - VIT Vellore",
+            "PRP - VIT Vellore",
+            "SMV - VIT Vellore"
+        ]
+    )
+
+    chosen_location_name = selected_vit_place
+
+else:
+    chosen_location_name = selected_place
+
+# ACCESSIBILITY FEATURE SELECTION
 selected_feature = st.selectbox(
-    "Choose Accessibility Feature",
+    "Choose an accessibility feature",
     features
 )
 
-# Search button
-search_button = st.button(
-    "Search Locations",
-    type="primary"
-)
-
-# Search logic
-if search_button:
-
-    count = 0
-
-    st.header("Search Results")
+# CHECK ACCESSIBILITY
+if st.button("Check Accessibility", type="primary"):
 
     for location in locations:
 
-        # Check location name
-        if search_name.lower() in location["name"].lower():
+        if location["name"] == chosen_location_name:
 
-            # Check location type
-            if selected_type == "All Locations":
-                type_match = True
+            st.divider()
 
-            elif location["type"] == selected_type:
-                type_match = True
+            st.header(location["name"])
+
+            st.write("Location type: " + location["type"])
+
+            # DISPLAY SELECTED FEATURE
+            st.subheader("Selected Feature")
+
+            status = location["access"][selected_feature]
+
+            if status == "Yes":
+
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #D9FBE5;
+                        color: #166534;
+                        padding: 14px;
+                        margin: 8px 0;
+                        border-radius: 8px;
+                        border: 1px solid #86EFAC;
+                        font-size: 17px;
+                        font-weight: 600;
+                    ">
+                        {selected_feature}: Yes
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            elif status == "No":
+
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #FEE2E2;
+                        color: #991B1B;
+                        padding: 14px;
+                        margin: 8px 0;
+                        border-radius: 8px;
+                        border: 1px solid #FCA5A5;
+                        font-size: 17px;
+                        font-weight: 600;
+                    ">
+                        {selected_feature}: No
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
             else:
-                type_match = False
 
-            # Display matching locations
-            if type_match:
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #CFE2FF;
+                        color: #174078;
+                        padding: 14px;
+                        margin: 8px 0;
+                        border-radius: 8px;
+                        border: 1px solid #8BB9F0;
+                        font-size: 17px;
+                        font-weight: 600;
+                    ">
+                        {selected_feature}: No info
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
-                count = count + 1
+            # DISPLAY ALL ACCESSIBILITY DETAILS
+            st.subheader("All Accessibility Details")
 
-                with st.expander(location["name"]):
+            yes_count = 0
 
-                    st.write(
-                        "Location Type:",
-                        location["type"]
+            for feature in features:
+
+                feature_status = location["access"][feature]
+
+                if feature_status == "Yes":
+
+                    yes_count = yes_count + 1
+
+                    st.markdown(
+                        f"""
+                        <div style="
+                            background-color: #D9FBE5;
+                            color: #166534;
+                            padding: 14px;
+                            margin: 8px 0;
+                            border-radius: 8px;
+                            border: 1px solid #86EFAC;
+                            font-size: 17px;
+                            font-weight: 600;
+                        ">
+                            {feature}: Yes
+                        </div>
+                        """,
+                        unsafe_allow_html=True
                     )
 
-                    # Display selected feature status
-                    status = location["access"][selected_feature]
+                elif feature_status == "No":
 
-                    st.subheader("Selected Feature Status")
+                    st.markdown(
+                        f"""
+                        <div style="
+                            background-color: #FEE2E2;
+                            color: #991B1B;
+                            padding: 14px;
+                            margin: 8px 0;
+                            border-radius: 8px;
+                            border: 1px solid #FCA5A5;
+                            font-size: 17px;
+                            font-weight: 600;
+                        ">
+                            {feature}: No
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
-                    if status == "Yes":
-                        st.success(
-                            selected_feature + ": Yes - Available"
-                        )
+                else:
 
-                    elif status == "No":
-                        st.error(
-                            selected_feature + ": No - Not available"
-                        )
+                    st.markdown(
+                        f"""
+                        <div style="
+                            background-color: #CFE2FF;
+                            color: #174078;
+                            padding: 14px;
+                            margin: 8px 0;
+                            border-radius: 8px;
+                            border: 1px solid #8BB9F0;
+                            font-size: 17px;
+                            font-weight: 600;
+                        ">
+                            {feature}: No info
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
-                    else:
-                        st.info(
-                            selected_feature + ": No info"
-                        )
+            # CALCULATE AVAILABILITY SCORE
+            availability_score = round(
+                (yes_count / 6) * 100
+            )
 
-                    # Display every accessibility feature
-                    st.subheader("All Accessibility Details")
+            # DISPLAY AVAILABILITY SCORE
+            st.subheader("Availability Score")
 
-                    for feature in features:
+            st.metric(
+                "Score",
+                str(availability_score) + "/100"
+            )
 
-                        feature_status = location["access"][feature]
+            st.write(
+                str(yes_count) + " out of 6 features are marked Yes."
+            )
 
-                        if feature_status == "Yes":
-                            st.success(feature + ": Yes")
+            st.progress(availability_score / 100)
 
-                        elif feature_status == "No":
-                            st.error(feature + ": No")
+            st.caption(
+                "This project-defined score is based on the six "
+                "features recorded in the database. It is not an "
+                "official accessibility certification."
+            )
 
-                        else:
-                            st.info(feature + ": No info")
-
-    # Final result count
-    if count == 0:
-
-        st.warning(
-            "No matching locations found. Try another search or location type."
-        )
-
-    else:
-
-        st.success(
-            "Total matching locations: " + str(count)
-        )
+            break
 
 st.divider()
 
