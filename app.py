@@ -2,13 +2,13 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="AccessAble Vellore",
+    page_title="AccessAble",
     page_icon="♿",
     layout="wide"
 )
 
 # FRONT PAGE
-st.title("♿ AccessAble Vellore")
+st.title("♿ AccessAbl")
 
 st.subheader("Accessibility Information for Important Locations")
 
@@ -419,5 +419,5 @@ if st.button("Check Accessibility", type="primary"):
 st.divider()
 
 st.caption(
-    "AccessAble Vellore | Accessibility Information Project"
+    "AccessAble| Accessibility Information Project"
 )
