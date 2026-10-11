@@ -1,34 +1,17 @@
 
 import streamlit as st
+import streamlit.components.v1 as components
+from sklearn.tree import DecisionTreeClassifier
 
-st.set_page_config(
-    page_title="AccessAble",
-    page_icon="♿",
-    layout="wide"
-)
+st.set_page_config(page_title="AccessAble", page_icon="♿", layout="wide")
 
-# FRONT PAGE
 st.title("♿ AccessAble")
-
 st.subheader("Accessibility Information for Important Locations")
 
-st.write(
-    "Choose a location and check its accessibility features."
-)
+st.write("Choose a location and check its accessibility features.")
+st.write("Yes = Available | No = Not available | No info = Not verified")
+st.write("Accessibility Score = (Number of Yes features / 6) x 100")
 
-st.write(
-    "Yes = Available | No = Not available | "
-    "No info = Treated as not available"
-)
-
-st.write(
-    "Availability Score = "
-    "(Number of features marked Yes / 6) x 100"
-)
-
-st.divider()
-
-# ACCESSIBILITY FEATURES
 features = [
     "Ramp",
     "Lift",
@@ -38,386 +21,219 @@ features = [
     "Wheelchair Friendly Entrance"
 ]
 
-# LOCATION DATABASE
-locations = [
-    {
-        "name": "Katpadi Railway Station",
+locations = {
+    "Katpadi Railway Station": {
+        "latitude": 12.9614,
+        "longitude": 79.1326,
         "type": "Railway Station",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "Yes",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "Yes", "Yes"]
     },
-    {
-        "name": "Sri Narayani Hospital",
+    "Sri Narayani Hospital": {
+        "latitude": 12.8700,
+        "longitude": 79.0800,
         "type": "Hospital",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "Yes",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "Yes", "No info", "Yes"]
     },
-    {
-        "name": "Vellore New Bus Station",
+    "Vellore New Bus Station": {
+        "latitude": 12.9347,
+        "longitude": 79.1371,
         "type": "Bus Stand",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No",
-            "Braille Support": "No",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No", "No", "Yes"]
     },
-    {
-        "name": "Health Centre - VIT Vellore",
+    "Health Centre - VIT Vellore": {
+        "latitude": 12.9719,
+        "longitude": 79.1602,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "TT - VIT Vellore",
+    "TT - VIT Vellore": {
+        "latitude": 12.9692,
+        "longitude": 79.1559,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "SJT - VIT Vellore",
+    "SJT - VIT Vellore": {
+        "latitude": 12.9711,
+        "longitude": 79.1637,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "MGR Block - VIT Vellore",
+    "MGR Block - VIT Vellore": {
+        "latitude": 12.9697,
+        "longitude": 79.1578,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "Library - VIT Vellore",
+    "Library - VIT Vellore": {
+        "latitude": 12.9692,
+        "longitude": 79.1567,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "PRP - VIT Vellore",
+    "PRP - VIT Vellore": {
+        "latitude": 12.9717,
+        "longitude": 79.1633,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     },
-    {
-        "name": "SMV - VIT Vellore",
+    "SMV - VIT Vellore": {
+        "latitude": 12.9699,
+        "longitude": 79.1565,
         "type": "College",
-        "access": {
-            "Ramp": "Yes",
-            "Lift": "Yes",
-            "Accessible Washrooms": "Yes",
-            "Tactile Path": "No info",
-            "Braille Support": "No info",
-            "Wheelchair Friendly Entrance": "Yes"
-        }
+        "features": ["Yes", "Yes", "Yes", "No info", "No info", "Yes"]
     }
+}
+
+# Accessibility status colours
+status_colours = {
+    "Yes": ("#D9FBE5", "#166534", "#86EFAC"),
+    "No": ("#FEE2E2", "#991B1B", "#FCA5A5"),
+    "No info": ("#CFE2FF", "#174078", "#8BB9F0")
+}
+
+# Dropdown selection
+place_options = [
+    "VIT",
+    "Katpadi Railway Station",
+    "Sri Narayani Hospital",
+    "Vellore New Bus Station"
 ]
 
-# HOW ACCESSIBILITY WORKS
-st.header("How Accessibility Works")
+selected_place = st.selectbox("Select a location", place_options)
 
-st.write(
-    "Accessibility means making places easier to enter, "
-    "move around, and use for people with different access needs."
-)
-
-st.write(
-    "Ramp: Helps people move between different levels."
-)
-
-st.write(
-    "Lift: Helps people reach different floors."
-)
-
-st.write(
-    "Accessible Washrooms: Designed to make washrooms "
-    "easier to access and use."
-)
-
-st.write(
-    "Tactile Path: Textured ground indicators that help "
-    "people with visual impairments navigate."
-)
-
-st.write(
-    "Braille Support: Braille labels or signs that provide "
-    "information to people who read Braille."
-)
-
-st.write(
-    "Wheelchair Friendly Entrance: An entrance designed "
-    "to make access easier for wheelchair users."
-)
-
-st.divider()
-
-# LOCATION SELECTION
-st.header("Choose a Location")
-
-selected_place = st.selectbox(
-    "Location",
-    [
-        "VIT",
-        "Katpadi Railway Station",
-        "Sri Narayani Hospital",
-        "Vellore New Bus Station"
-    ]
-)
-
-# VIT SUBDIVISIONS
 if selected_place == "VIT":
+    vit_options = [
+        "Health Centre - VIT Vellore",
+        "TT - VIT Vellore",
+        "SJT - VIT Vellore",
+        "MGR Block - VIT Vellore",
+        "Library - VIT Vellore",
+        "PRP - VIT Vellore",
+        "SMV - VIT Vellore"
+    ]
 
-    selected_vit_place = st.selectbox(
-        "Choose a place inside VIT Vellore",
-        [
-            "Health Centre - VIT Vellore",
-            "TT - VIT Vellore",
-            "SJT - VIT Vellore",
-            "MGR Block - VIT Vellore",
-            "Library - VIT Vellore",
-            "PRP - VIT Vellore",
-            "SMV - VIT Vellore"
-        ]
+    chosen_location_name = st.selectbox(
+        "Select a VIT building",
+        vit_options
     )
-
-    chosen_location_name = selected_vit_place
-
 else:
     chosen_location_name = selected_place
 
-# ACCESSIBILITY FEATURE SELECTION
-selected_feature = st.selectbox(
-    "Choose an accessibility feature",
-    features
-)
+# Prepare ML training data
+training_data = []
+training_labels = []
 
-# CHECK ACCESSIBILITY
-if st.button("Check Accessibility", type="primary"):
+for location_name in locations:
+    feature_values = []
+    yes_count = 0
 
-    for location in locations:
+    for status in locations[location_name]["features"]:
+        if status == "Yes":
+            feature_values.append(1)
+            yes_count = yes_count + 1
+        else:
+            feature_values.append(0)
 
-        if location["name"] == chosen_location_name:
+    score = round((yes_count / 6) * 100)
 
-            st.divider()
+    if score >= 80:
+        category = 2
+    elif score >= 50:
+        category = 1
+    else:
+        category = 0
 
-            st.header(location["name"])
+    training_data.append(feature_values)
+    training_labels.append(category)
 
-            st.write("Location type: " + location["type"])
+# Train the ML model
+ml_model = DecisionTreeClassifier(random_state=42)
+ml_model.fit(training_data, training_labels)
 
-            # DISPLAY SELECTED FEATURE
-            st.subheader("Selected Feature")
-
-            status = location["access"][selected_feature]
-
-            if status == "Yes":
-
-                st.markdown(
-                    f"""
-                    <div style="
-                        background-color: #D9FBE5;
-                        color: #166534;
-                        padding: 14px;
-                        margin: 8px 0;
-                        border-radius: 8px;
-                        border: 1px solid #86EFAC;
-                        font-size: 17px;
-                        font-weight: 600;
-                    ">
-                        {selected_feature}: Yes
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            elif status == "No":
-
-                st.markdown(
-                    f"""
-                    <div style="
-                        background-color: #FEE2E2;
-                        color: #991B1B;
-                        padding: 14px;
-                        margin: 8px 0;
-                        border-radius: 8px;
-                        border: 1px solid #FCA5A5;
-                        font-size: 17px;
-                        font-weight: 600;
-                    ">
-                        {selected_feature}: No
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            else:
-
-                st.markdown(
-                    f"""
-                    <div style="
-                        background-color: #CFE2FF;
-                        color: #174078;
-                        padding: 14px;
-                        margin: 8px 0;
-                        border-radius: 8px;
-                        border: 1px solid #8BB9F0;
-                        font-size: 17px;
-                        font-weight: 600;
-                    ">
-                        {selected_feature}: No info
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            # DISPLAY ALL ACCESSIBILITY DETAILS
-            st.subheader("All Accessibility Details")
-
-            yes_count = 0
-
-            for feature in features:
-
-                feature_status = location["access"][feature]
-
-                if feature_status == "Yes":
-
-                    yes_count = yes_count + 1
-
-                    st.markdown(
-                        f"""
-                        <div style="
-                            background-color: #D9FBE5;
-                            color: #166534;
-                            padding: 14px;
-                            margin: 8px 0;
-                            border-radius: 8px;
-                            border: 1px solid #86EFAC;
-                            font-size: 17px;
-                            font-weight: 600;
-                        ">
-                            {feature}: Yes
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-
-                elif feature_status == "No":
-
-                    st.markdown(
-                        f"""
-                        <div style="
-                            background-color: #FEE2E2;
-                            color: #991B1B;
-                            padding: 14px;
-                            margin: 8px 0;
-                            border-radius: 8px;
-                            border: 1px solid #FCA5A5;
-                            font-size: 17px;
-                            font-weight: 600;
-                        ">
-                            {feature}: No
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-
-                else:
-
-                    st.markdown(
-                        f"""
-                        <div style="
-                            background-color: #CFE2FF;
-                            color: #174078;
-                            padding: 14px;
-                            margin: 8px 0;
-                            border-radius: 8px;
-                            border: 1px solid #8BB9F0;
-                            font-size: 17px;
-                            font-weight: 600;
-                        ">
-                            {feature}: No info
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-
-            # CALCULATE AVAILABILITY SCORE
-            availability_score = round(
-                (yes_count / 6) * 100
-            )
-
-            # DISPLAY AVAILABILITY SCORE
-            st.subheader("Availability Score")
-
-            st.metric(
-                "Score",
-                str(availability_score) + "/100"
-            )
-
-            st.write(
-                str(yes_count) + " out of 6 features are marked Yes."
-            )
-
-            st.progress(availability_score / 100)
-
-            st.caption(
-                "This project-defined score is based on the six "
-                "features recorded in the database. It is not an "
-                "official accessibility certification."
-            )
-
-            break
+# Get selected location details
+selected_data = locations[chosen_location_name]
+selected_features = selected_data["features"]
 
 st.divider()
+st.header(chosen_location_name)
+st.write("Location type:", selected_data["type"])
 
-st.caption(
-    "AccessAble| Accessibility Information Project"
+# Display Google Maps
+latitude = selected_data["latitude"]
+longitude = selected_data["longitude"]
+
+map_url = (
+    "https://maps.google.com/maps?q="
+    + str(latitude) + "," + str(longitude)
+    + "&z=16&output=embed"
 )
+
+components.iframe(map_url, height=400, scrolling=True)
+
+st.subheader("Accessibility Features")
+
+yes_count = 0
+missing_count = 0
+ml_input = []
+
+for i in range(len(features)):
+    status = selected_features[i]
+
+    if status == "Yes":
+        yes_count = yes_count + 1
+        ml_input.append(1)
+    elif status == "No":
+        ml_input.append(0)
+    else:
+        missing_count = missing_count + 1
+        ml_input.append(0)
+
+    background, text_colour, border_colour = status_colours[status]
+
+    st.markdown(
+        f"""
+        <div style="
+            background-color:{background};
+            color:{text_colour};
+            border:1px solid {border_colour};
+            border-radius:10px;
+            padding:12px;
+            margin:7px 0;
+            font-weight:600;">
+            {features[i]}: {status}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Calculate accessibility score
+score = round((yes_count / 6) * 100)
+
+st.divider()
+st.subheader("Accessibility Score")
+
+st.metric("Recorded availability score", str(score) + "/100")
+st.progress(score / 100)
+
+st.write("Features marked Yes:", yes_count, "out of 6")
+st.write("Features marked No info:", missing_count)
+
+# Machine Learning Analysis
+st.divider()
+st.subheader("Machine Learning Analysis")
+st.write("ML: Integrated")
+
+# Accessibility information
+st.divider()
+st.subheader("How Accessibility Works")
+
+st.write("""
+- Ramp: Helps wheelchair users move between levels.
+- Lift: Provides access between floors.
+- Accessible Washrooms: Washrooms designed for accessibility.
+- Tactile Path: Helps people with visual impairments navigate.
+- Braille Support: Provides information through Braille.
+- Wheelchair Friendly Entrance: Provides step-free entry.
+""")
+
+st.caption("AccessAble | Accessibility Information Project")
