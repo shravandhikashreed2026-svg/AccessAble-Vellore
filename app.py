@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # FRONT PAGE
-st.title("♿ AccessAbl")
+st.title("♿ AccessAble")
 
 st.subheader("Accessibility Information for Important Locations")
 
