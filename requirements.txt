@@ -1,3 +1,4 @@
-streamlit==1.65.0
+
 streamlit==1.65.0
 scikit-learn
+streamlit-mic-recorder==0.0.8
