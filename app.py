@@ -1,4 +1,3 @@
-
 import streamlit as st
 import streamlit.components.v1 as components
 from sklearn.tree import DecisionTreeClassifier
@@ -111,15 +110,15 @@ if selected_place == "VIT":
         "PRP - VIT Vellore",
         "SMV - VIT Vellore"
     ]
-
     chosen_location_name = st.selectbox(
-        "Select a VIT building",
-        vit_options
+        "Select a VIT building", vit_options
     )
 else:
     chosen_location_name = selected_place
 
-# Prepare ML training data
+# Prepare demonstration ML training data
+# Yes = 1, No = 0, No info = 0
+
 training_data = []
 training_labels = []
 
@@ -206,7 +205,6 @@ for i in range(len(features)):
         unsafe_allow_html=True
     )
 
-# Calculate accessibility score
 score = round((yes_count / 6) * 100)
 
 st.divider()
@@ -221,9 +219,30 @@ st.write("Features marked No info:", missing_count)
 # Machine Learning Analysis
 st.divider()
 st.subheader("Machine Learning Analysis")
-st.write("ML: Integrated")
 
-# Accessibility information
+prediction = ml_model.predict([ml_input])[0]
+
+if prediction == 2:
+    predicted_category = "High Accessibility"
+elif prediction == 1:
+    predicted_category = "Moderate Accessibility"
+else:
+    predicted_category = "Low Accessibility"
+
+st.success("ML Prediction: " + predicted_category)
+
+st.info(
+    "The Decision Tree Classifier categorizes the location into "
+    "High, Moderate, or Low Accessibility based on its six recorded "
+    "accessibility features. No info is counted as 0 for this "
+    "demonstration only."
+)
+
+st.warning(
+    "Accessibility information has not been independently verified. "
+    "Please confirm the features with the relevant location before visiting."
+)
+
 st.divider()
 st.subheader("How Accessibility Works")
 
